@@ -1,6 +1,7 @@
 package com.ulfric.conf4j;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -164,15 +165,9 @@ public class Configuration {
 				}
 
 				ConfigurationKey key = new ConfigurationKey(parentSections, name, returnType);
-				builder = builder.defineMethod(name, returnType) // TODO any flags needed?
+				builder = builder.defineMethod(name, returnType)
 						.intercept(MethodDelegation.to(new ConfigurationElement(key)));
 			}
-			/*
-			 * 		builder = builder.method(ElementMatchers.not(
-				ElementMatchers.isDeclaredBy(Object.class)
-				.or(ElementMatchers.isDeclaredBy(ConfigurationBean.class))))
-				.intercept(arg0);
-			 */
 		}
 
 		return builder.make().load(type.getClassLoader()).getLoaded();
@@ -196,7 +191,7 @@ public class Configuration {
 						Type returnType = extendAsStaticBean(method.getGenericReturnType());
 
 						String name = method.getName();
-						builder = builder.defineField(name, returnType); // TODO any options needed here?
+						builder = builder.defineField(name, returnType, Visibility.PRIVATE);
 						builder = builder.defineMethod(name, returnType)
 									.intercept(FieldAccessor.ofField(name));
 					}
