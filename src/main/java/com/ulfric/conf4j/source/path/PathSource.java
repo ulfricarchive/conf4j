@@ -7,6 +7,8 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import com.ulfric.conf4j.interpreter.DataType;
@@ -25,13 +27,13 @@ public class PathSource implements Source {
 	}
 
 	@Override
-	public Reader read() {
+	public List<Reader> read() {
 		try {
 			if (Files.notExists(path)) {
-				return new StringReader("");
+				return Collections.singletonList(new StringReader(""));
 			}
 
-			return Files.newBufferedReader(path);
+			return Collections.singletonList(Files.newBufferedReader(path));
 		} catch (IOException exception) {
 			throw new UncheckedIOException(exception);
 		}

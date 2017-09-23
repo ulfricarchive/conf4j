@@ -6,6 +6,8 @@ import com.ulfric.conf4j.source.Source;
 import java.io.Reader;
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class StringSource implements Source {
@@ -23,8 +25,8 @@ public class StringSource implements Source {
 	}
 
 	@Override
-	public Reader read() {
-		return new StringReader(data);
+	public List<Reader> read() {
+		return Collections.singletonList(new StringReader(data));
 	}
 
 	@Override

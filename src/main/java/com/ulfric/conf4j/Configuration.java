@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import com.ulfric.conf4j.interpreter.Interpreter;
 import com.ulfric.conf4j.interpreter.InterpreterProvider;
+import com.ulfric.conf4j.reload.ReloadingStrategy;
 import com.ulfric.conf4j.source.Source;
 
 import java.lang.reflect.Method;
@@ -40,11 +41,12 @@ public class Configuration {
 	public static final class Builder {
 		private InterpreterProvider interpreter;
 		private Source source;
+		private ReloadingStrategy reloadingStrategy;
 
 		private Builder() {}
 
 		public Configuration build() {
-			return new Configuration(interpreter, source);
+			return new Configuration(interpreter, source, reloadingStrategy);
 		}
 
 		public Builder setInterpreter(InterpreterProvider interpreter) {
@@ -60,6 +62,11 @@ public class Configuration {
 			this.source = source;
 			return this;
 		}
+
+		public Builder setReloadingStrategy(ReloadingStrategy reloadingStrategy) {
+			this.reloadingStrategy = reloadingStrategy;
+			return this;
+		}
 	}
 
 	private final InterpreterProvider provider;
@@ -67,12 +74,16 @@ public class Configuration {
 	private JsonObject data;
 	private Map<String, Map<Type, Object>> parsedData;
 
-	public Configuration(InterpreterProvider provider, Source source) {
+	public Configuration(InterpreterProvider provider, Source source, ReloadingStrategy reloadingStrategy) {
 		Objects.requireNonNull(provider, "provider");
 		Objects.requireNonNull(source, "source");
 
 		this.provider = provider;
 		this.source = source;
+
+		if (reloadingStrategy != null) {
+			reloadingStrategy.register(this); // TODO unregister when closing
+		}
 	}
 
 	public <T> T as(Class<? extends T> type) {
@@ -236,7 +247,8 @@ public class Configuration {
 
 	public void reload() {
 		Interpreter interpreter = provider.apply(source.getType());
-		Map<String, Object> dataAsMap = interpreter.apply(source.read());
+		Map<String, Object> dataAsMap = new HashMap<>();
+		source.read().stream().map(interpreter::apply).forEach(dataAsMap::putAll);
 		data = (JsonObject) GSON.toJsonTree(dataAsMap);
 		parsedData = new HashMap<>();
 	}
