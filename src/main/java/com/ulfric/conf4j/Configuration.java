@@ -189,7 +189,7 @@ public class Configuration {
 			Class<?> clazz = (Class<?>) type;
 
 			if (isConfigurationBeanType(clazz)) {
-				DynamicType.Builder<?> builder = new ByteBuddy().subclass(clazz).implement(StaticBean.class);
+				DynamicType.Builder<?> builder = new ByteBuddy().subclass(clazz);
 
 				for (Method method : clazz.getMethods()) {
 					if (isConfigurationMethod(method)) {
