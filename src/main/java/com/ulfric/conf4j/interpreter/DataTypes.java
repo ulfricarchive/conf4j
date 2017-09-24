@@ -1,11 +1,11 @@
 package com.ulfric.conf4j.interpreter;
 
+import com.ulfric.conf4j.interpreter.json.JsonDataType;
+import com.ulfric.conf4j.interpreter.yaml.YamlDataType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import com.ulfric.conf4j.interpreter.json.JsonDataType;
-import com.ulfric.conf4j.interpreter.yaml.YamlDataType;
 
 public class DataTypes {
 

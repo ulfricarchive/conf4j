@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 public class MultiSource implements Source {
 
 	private final DataType type;
-	private final List<Source> sources;
+	private final List<? extends Source> sources;
 
-	public MultiSource(DataType type, List<Source> sources) {
+	public MultiSource(DataType type, List<? extends Source> sources) {
 		Objects.requireNonNull(type, "type");
 		Objects.requireNonNull(sources, "sources");
 
