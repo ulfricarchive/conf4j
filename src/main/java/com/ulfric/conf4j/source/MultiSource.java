@@ -44,4 +44,9 @@ public class MultiSource implements Source {
 				.orElse(Instant.MIN);
 	}
 
+	@Override
+	public String getName() {
+		return sources.stream().map(Source::getName).collect(Collectors.joining(", "));
+	}
+
 }

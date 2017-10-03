@@ -53,7 +53,7 @@ public class PathSource implements Source {
 			return NoDataType.INSTANCE;
 		}
 
-		return DataTypes.get(name.substring(dot));
+		return DataTypes.get(name.substring(dot + 1));
 	}
 
 	@Override
@@ -63,6 +63,11 @@ public class PathSource implements Source {
 		} catch (IOException exception) {
 			return Instant.MIN;
 		}
+	}
+
+	@Override
+	public String getName() {
+		return path.toString();
 	}
 
 }

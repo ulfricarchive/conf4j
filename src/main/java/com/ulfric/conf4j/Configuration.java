@@ -9,7 +9,9 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -29,10 +31,14 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class Configuration {
 
-	private static final Gson GSON = new Gson();
+	private static final Gson GSON = new GsonBuilder()
+			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES)
+			.create();
+	public static final Pattern CAPITALS_GROUP = Pattern.compile("([A-Z0-9]+)");
 
 	public static Builder builder() {
 		return new Builder();
@@ -248,7 +254,7 @@ public class Configuration {
 	public void reload() {
 		Interpreter interpreter = provider.apply(source.getType());
 		Map<String, Object> dataAsMap = new HashMap<>();
-		source.read().stream().map(interpreter::apply).forEach(dataAsMap::putAll);
+		source.read().stream().map(interpreter::apply).filter(Objects::nonNull).forEach(dataAsMap::putAll);
 		data = (JsonObject) GSON.toJsonTree(dataAsMap);
 		parsedData = new HashMap<>();
 	}

@@ -39,4 +39,9 @@ public class StringSource implements Source {
 		return creation;
 	}
 
+	@Override
+	public String getName() {
+		return "String:" + data.hashCode();
+	}
+
 }

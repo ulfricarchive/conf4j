@@ -20,19 +20,21 @@ public class DataTypes {
 	public static void register(DataType type) {
 		Objects.requireNonNull(type, "type");
 
-		TYPES_BY_STRING.put(type.toString().toLowerCase(), type);
+		type.getExtensions()
+			.forEach(name -> TYPES_BY_STRING.put(name, type));
 	}
 
 	public static void unregister(DataType type) {
 		Objects.requireNonNull(type, "type");
 
-		TYPES_BY_STRING.remove(type.toString().toLowerCase(), type);
+		type.getExtensions()
+			.forEach(name -> TYPES_BY_STRING.remove(name, type));
 	}
 
 	public static DataType get(String type) {
 		Objects.requireNonNull(type, "type");
 
-		return TYPES_BY_STRING.getOrDefault(type.toLowerCase(), NoDataType.INSTANCE);
+		return TYPES_BY_STRING.getOrDefault(type, NoDataType.INSTANCE);
 	}
 
 	private DataTypes() {

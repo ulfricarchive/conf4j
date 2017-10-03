@@ -1,12 +1,12 @@
 package com.ulfric.conf4j.interpreter.yaml;
 
-import java.io.Reader;
-import java.util.Map;
-
 import org.yaml.snakeyaml.Yaml;
 
 import com.ulfric.conf4j.interpreter.DataType;
 import com.ulfric.conf4j.interpreter.Interpreter;
+
+import java.io.Reader;
+import java.util.Map;
 
 public class YamlInterpreter implements Interpreter {
 

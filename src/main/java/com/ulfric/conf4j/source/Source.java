@@ -10,6 +10,8 @@ public interface Source {
 
 	List<Reader> read();
 
+	String getName();
+
 	DataType getType();
 
 	Instant getLastChange();

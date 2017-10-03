@@ -5,9 +5,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.StringJoiner;
+import java.util.regex.Pattern;
 
 final class ConfigurationKey {
+
+	public static final Pattern CAPITALS_GROUP = Pattern.compile("([A-Z0-9]+)");
+
+	public static String hyphenate(String name) {
+		return CAPITALS_GROUP.matcher(name).replaceAll("-$0").toLowerCase();
+	}
 
 	private final List<String> parentSections;
 	private final String name;
@@ -22,12 +29,10 @@ final class ConfigurationKey {
 		this.parentSections = Collections.unmodifiableList(new ArrayList<>(parentSections));
 		this.name = name;
 
-		String fullKey = parentSections.stream().collect(Collectors.joining("."));
-		if (!fullKey.isEmpty()) {
-			fullKey = fullKey + '.';
-		}
-		fullKey = fullKey + name;
-		this.fullKey = fullKey;
+		StringJoiner joiner = new StringJoiner(".");
+		parentSections.stream().map(ConfigurationKey::hyphenate).forEach(joiner::add);
+		joiner.add(hyphenate(name));
+		this.fullKey = joiner.toString();
 
 		this.type = type;
 	}
