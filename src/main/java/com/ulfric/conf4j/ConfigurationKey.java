@@ -26,12 +26,14 @@ final class ConfigurationKey {
 		Objects.requireNonNull(name, "name");
 		Objects.requireNonNull(type, "type");
 
+		name = hyphenate(name);
+
 		this.parentSections = Collections.unmodifiableList(new ArrayList<>(parentSections));
 		this.name = name;
 
 		StringJoiner joiner = new StringJoiner(".");
 		parentSections.stream().map(ConfigurationKey::hyphenate).forEach(joiner::add);
-		joiner.add(hyphenate(name));
+		joiner.add(name);
 		this.fullKey = joiner.toString();
 
 		this.type = type;

@@ -1,11 +1,16 @@
 package com.ulfric.conf4j;
 
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.FieldAccessor;
-import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 
@@ -14,24 +19,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import com.ulfric.conf4j.interpreter.Interpreter;
 import com.ulfric.conf4j.interpreter.InterpreterProvider;
 import com.ulfric.conf4j.reload.ReloadingStrategy;
 import com.ulfric.conf4j.source.Source;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 
 public class Configuration {
 
@@ -269,7 +267,7 @@ public class Configuration {
 		@RuntimeType
 		public Object intercept() {
 			Map<Type, Object> parsedData =
-					Configuration.this.parsedData.computeIfAbsent(key.getFullKey(), ignore -> new IdentityHashMap<>()); // TODO do we really want to use identity?
+					Configuration.this.parsedData.computeIfAbsent(key.getFullKey(), ignore -> new HashMap<>()); // TODO do we want to use identityhashmap?
 
 			return parsedData.computeIfAbsent(key.getType(), type -> {
 				JsonObject data = Configuration.this.data;
