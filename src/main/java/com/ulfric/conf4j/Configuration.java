@@ -252,7 +252,7 @@ public class Configuration {
 	public void reload() {
 		Interpreter interpreter = provider.apply(source.getType());
 		Map<String, Object> dataAsMap = new HashMap<>();
-		source.read().stream().map(interpreter::apply).filter(Objects::nonNull).forEach(dataAsMap::putAll);
+		source.read().stream().map(interpreter::apply).filter(Objects::nonNull).forEach(dataAsMap::putAll); // TODO merge these instead of overriding
 		data = (JsonObject) GSON.toJsonTree(dataAsMap);
 		parsedData = new HashMap<>();
 	}
