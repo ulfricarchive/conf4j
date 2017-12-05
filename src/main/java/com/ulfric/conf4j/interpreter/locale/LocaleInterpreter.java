@@ -26,6 +26,10 @@ public class LocaleInterpreter implements Interpreter {
 
 		for (String line : readLines(reader)) {
 			int splitOn = line.indexOf('=');
+			if (splitOn == -1) {
+				continue;
+			}
+
 			String key = StringUtils.stripEnd(line.substring(0, splitOn), null);
 			String value = StringUtils.stripStart(line.substring(splitOn + 1), null);
 
