@@ -32,7 +32,9 @@ public class LocaleInterpreter implements Interpreter {
 			data.put(key, value);
 		}
 
-		return data;
+		Map<String, Object> wrapped = new HashMap<>();
+		wrapped.put("messages", data);
+		return wrapped;
 	}
 
 	private List<String> readLines(Reader reader) {
